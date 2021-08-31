@@ -23,7 +23,7 @@ def create_app(test_config=None):
         pass
 
     from . import reports
-    #app.register_blueprint(decks.bp)
+    app.register_blueprint(reports.bp)
     app.add_url_rule('/', endpoint='index')
 
     from . import db
