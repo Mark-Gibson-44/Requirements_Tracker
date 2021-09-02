@@ -6,7 +6,7 @@
             <header>
        
                 <div>
-                    <h1>{{ project['title'] }} <a href="{{url_for('index')}}"> Check out</a>
+                    <h1>{{ project['title'] }} <a href="{{url_for('reports.view_project', project_id=project['id'])}}"> Check out</a>
                     {% if g.user %}
                         <a class="action" href="{{ url_for('index') }}">Save</a>
                     {% endif %}

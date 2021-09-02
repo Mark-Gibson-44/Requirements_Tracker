@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <form method="post">
+    <label for="title">Description</label>
+    <input name="Description" id="Description"
+      value="{{ request.form['Description'] }}" required>
+      <input name="parent_case" id="parent_case"
+      value="{{ request.form['parent_case'] }}">
+      <input name="child_case" id="child_case"
+      value="{{ request.form['child_case'] }}">
+      <input type="submit" value="Save" href="{{ url_for('index') }}">
+     
+  </form>
+  
+{% endblock %}

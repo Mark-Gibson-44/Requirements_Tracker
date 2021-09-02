@@ -52,12 +52,21 @@ Responsible for showing information of a given project
 
 p_id -> integer: Used To Identify project 
 '''
-@bp.route('/browse_project')
+@bp.route('/<int:project_id>/browse_project')
 def view_project(project_id):
     db = get_db()
     cases = db.execute('SELECT * FROM _case WHERE _project_id = ?', (project_id,)).fetchall()
 
-    return render_template('tracking/view_project.html')
+    return render_template('tracking/view_project.html', cases=cases)
 
 
-    
+@bp.route('/<int:project_id>/gen_tree')
+def gen_tree(project_id):
+    db = get_db()
+    cases = db.execute('SELECT * FROM _case WHERE _project_id = ?', (project_id,)).fetchall()
+    out = open('out.txt')
+    out.write('digraph\n{\n')
+    for case in cases:
+        out.write('{0} -> {1}, \n'.format(case['id'], case['child_id']))
+    out.write('}')
+    return redirect(url_for('index'))
