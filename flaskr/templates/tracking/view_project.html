@@ -7,22 +7,21 @@
        
                 <div>
                     <h1>{{ case['_description'] }} <a href="{{url_for('index')}}"> Check out</a>
-                    {% if g.user %}
-                        <a class="action" href="{{ url_for('index') }}">Save</a>
-                    {% endif %}
+                    
                     </h1>
                 </div>
             </header>
             
         </article>
         {% if not loop.last %}
-        <a href="{{url_for('reports/gen_tree', project_id=case['project_id'])}}"> Gen Tree</a>
+        
             <hr>
             
         {% endif %}
     {% endfor %}
     <hr>
     <div>
-        <a  href="{{url_for('index')}}">Add Case</a>
+        <a  href="{{url_for('reports.add_case', project_id=id)}}">Add Case</a>
+        <a href="{{url_for('reports.gen_tree', project_id=id)}}"> Gen Tree</a>
     </div>
 {% endblock %}

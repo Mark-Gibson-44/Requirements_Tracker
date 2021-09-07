@@ -23,10 +23,10 @@ CREATE TABLE _case (
     _project_id INTEGER NOT NULL,
     parent_id INTEGER,
     child_id INTEGER,
-    _owner INTEGER,
+    
     FOREIGN KEY (_project_id) REFERENCES _project(id),
     
     FOREIGN KEY (parent_id) REFERENCES _case(id),
     FOREIGN KEY (child_id) REFERENCES _case(id),
-    FOREIGN KEY (_owner) REFERENCES user(id) 
+    
 );

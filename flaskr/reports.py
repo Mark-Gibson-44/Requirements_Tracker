@@ -57,16 +57,47 @@ def view_project(project_id):
     db = get_db()
     cases = db.execute('SELECT * FROM _case WHERE _project_id = ?', (project_id,)).fetchall()
 
-    return render_template('tracking/view_project.html', cases=cases)
+    return render_template('tracking/view_project.html', cases=cases, id=project_id)
 
 
 @bp.route('/<int:project_id>/gen_tree')
 def gen_tree(project_id):
     db = get_db()
     cases = db.execute('SELECT * FROM _case WHERE _project_id = ?', (project_id,)).fetchall()
-    out = open('out.txt')
+    out = open('out.txt', 'w')
     out.write('digraph\n{\n')
     for case in cases:
-        out.write('{0} -> {1}, \n'.format(case['id'], case['child_id']))
+        out.write('{}\n'.format(case['id']))
+        if(case['child_id'] is not ""):
+            print(case['child_id'])
+            out.write('{0} -> {1} \n'.format(case['id'], case['child_id']))
+        if(case['parent_id'] is not ""):
+            out.write('{0} -> {1} \n'.format(case['parent_id'], case['id']))
     out.write('}')
     return redirect(url_for('index'))
+
+@bp.route('/<int:project_id>/add_case', methods=('GET', 'POST'))
+def add_case(project_id):
+    if request.method == 'POST':
+        Desc = request.form['Description']
+        error = None
+        if not Desc:
+            error = 'Title needed'
+        parent_case = request.form['parent_case']
+        child_case = request.form['child_case']
+        data = [Desc, project_id]
+        if parent_case is not None:
+            data.append(parent_case)
+        if child_case is not None:
+            data.append(child_case)
+        if error is not None:
+            flash(error)
+        else:
+            db = get_db()
+            db.execute(
+                'INSERT INTO _case (_description, _project_id, parent_id, child_id) VALUES (?, ?, ?, ?)',
+                (Desc, project_id, parent_case, child_case,)
+            )
+            db.commit()
+        
+    return render_template('tracking/add_case.html')
